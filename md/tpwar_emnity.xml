@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mdscript name="TPWAR_Emnity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/home/laplace/x4_projects/extracts/3.0b2extract/md/md.xsd">
+  <cues>
+    <cue name="Init" instantiate="true">
+      <conditions>
+        <event_cue_signalled />
+      </conditions>
+      <actions>
+        <!-- factions to exclude -->
+        <set_value name="$VanillaFactions" exact="
+         faction.player, faction.alliance, faction.antigone, faction.argon, faction.buccaneers, faction.civilian, 
+         faction.criminal, faction.hatikvah, faction.holyorder, faction.holyorderfanatic, faction.khaak, faction.ministry,
+         faction.ownerless, faction.paranid, faction.scaleplate, faction.smuggler, faction.teladi, faction.tempest, 
+         faction.trinity, faction.visitor, faction.xenon, faction.visitor001,faction.visitor002,faction.visitor003,faction.visitor004,faction.visitor005,
+         faction.visitor006,faction.visitor007,faction.visitor008,faction.visitor009,faction.visitor010,faction.visitor011,faction.visitor012,
+         faction.visitor013,faction.visitor014,faction.visitor015,faction.visitor016,faction.visitor017,faction.visitor018,faction.visitor019,
+         faction.visitor020,faction.visitor021,faction.visitor022,faction.visitor023,faction.visitor024,faction.visitor025,faction.visitor026,
+         faction.visitor027,faction.visitor028,faction.visitor029,faction.visitor030,faction.visitor031,faction.visitor032,faction.visitor033,
+         faction.visitor034,faction.visitor035,faction.visitor036,faction.visitor037,faction.visitor038,faction.visitor039,faction.visitor040,
+         faction.visitor041,faction.visitor042,faction.visitor043,faction.visitor044,faction.visitor045,faction.visitor046,faction.visitor047,
+         faction.visitor048,faction.visitor049,faction.visitor050,faction.visitor051,faction.visitor052,faction.visitor053,faction.visitor054,
+         faction.visitor055,faction.visitor056,faction.visitor057,faction.visitor058,faction.visitor059,faction.visitor060,faction.visitor061,
+         faction.visitor062,faction.visitor063,faction.visitor064,faction.visitor065,faction.visitor066,faction.visitor067,faction.visitor068,
+         faction.visitor069,faction.visitor070,faction.visitor071,faction.visitor072,faction.visitor073,faction.visitor074,faction.visitor075,
+         faction.visitor076,faction.visitor077,faction.visitor078,faction.visitor079,faction.visitor080,faction.visitor081,faction.visitor082,
+         faction.visitor083,faction.visitor084,faction.visitor085,faction.visitor086,faction.visitor087,faction.visitor088,faction.visitor089,
+         faction.visitor090,faction.visitor091,faction.visitor092,faction.visitor093,faction.visitor094,faction.visitor095,faction.visitor096,
+         faction.visitor097,faction.visitor098,faction.visitor099,faction.visitor100" />
+        <!-- all factions including all mod factions and all 100 venture factions -->
+        <set_value name="$Factions" exact="lookup.faction.list" />
+        <!-- remove the exclude factions from the set -->
+        <do_for_each in="$Factions" reverse="true">
+          <do_if value="loop.element.indexof.{$VanillaFactions} ge 0">
+            <remove_from_list name="$Factions" exact="loop.element" />
+          </do_if>
+        </do_for_each>
+        <!-- change relation beteen all unlocked and not excluded factions -->
+        <do_for_each in="$Factions" name="$OuterFaction">
+          <do_for_each in="$Factions" name="$InnerFaction">
+            <set_value name="$Relation" min="-1.0" max="1.0" />
+            <set_faction_relation faction="$InnerFaction" otherfaction="$OuterFaction" value="$Relation" />
+            <set_faction_relation faction="$OuterFaction" otherfaction="$InnerFaction" value="$Relation" />
+          </do_for_each>
+        </do_for_each>
+      </actions>
+    </cue>
+  </cues>
+</mdscript>
